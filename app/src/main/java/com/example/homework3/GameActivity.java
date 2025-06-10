@@ -2,8 +2,10 @@ package com.example.homework3;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,9 +14,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
-    private TextView lastGuessText, attemptsText, hintText;
+    private TextView lastGuessText, attemptsText, hintText, resultTitle, messageText, guessesText, correctNumberText, playAgainText;
     private EditText guessEditText;
-    private Button confirmButton;
+    private Button confirmButton, noButton, yesButton;
+    private LinearLayout resultBox;
     private int digitCount;
     private int correctNumber;
     private int remainingAttempts = 10;
@@ -26,11 +29,20 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // Khởi tạo các thành phần giao diện
         lastGuessText = findViewById(R.id.lastGuessText);
         attemptsText = findViewById(R.id.attemptsText);
         hintText = findViewById(R.id.hintText);
         guessEditText = findViewById(R.id.guessEditText);
         confirmButton = findViewById(R.id.confirmButton);
+        resultBox = findViewById(R.id.resultBox);
+        resultTitle = findViewById(R.id.resultTitle);
+        messageText = findViewById(R.id.messageText);
+        guessesText = findViewById(R.id.guessesText);
+        correctNumberText = findViewById(R.id.correctNumberText);
+        playAgainText = findViewById(R.id.playAgainText);
+        noButton = findViewById(R.id.noButton);
+        yesButton = findViewById(R.id.yesButton);
 
         // Lấy độ khó từ Intent
         digitCount = getIntent().getIntExtra("DIGIT_COUNT", 0);
@@ -61,7 +73,6 @@ public class GameActivity extends AppCompatActivity {
             return;
         }
 
-        // Kiểm tra độ dài
         if (String.valueOf(guess).length() != digitCount) {
             hintText.setText("Please enter a " + digitCount + "-digit number");
             return;
@@ -88,11 +99,43 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void showResult(boolean isWin) {
-        Intent intent = new Intent(GameActivity.this, ResultActivity.class);
-        intent.putIntegerArrayListExtra("GUESSES", guesses);
-        intent.putExtra("CORRECT_NUMBER", correctNumber);
-        intent.putExtra("IS_WIN", isWin);
-        startActivity(intent);
-        finish();
+        resultBox.setVisibility(View.VISIBLE);
+        confirmButton.setVisibility(View.GONE); // Ẩn nút CONFIRM
+        guessEditText.setVisibility(View.GONE); // Ẩn trường nhập
+
+        if (isWin) {
+            resultTitle.setText("Number Guessing Game - Congratulations!");
+            messageText.setText("You've guessed the number correctly!");
+        } else {
+            resultTitle.setText("Number Guessing Game - Game Over");
+            messageText.setText("You've used all attempts. Game Over");
+        }
+
+        StringBuilder guessesStr = new StringBuilder("Your guesses: ");
+        for (int guess : guesses) {
+            guessesStr.append(guess).append(", ");
+        }
+        if (!guesses.isEmpty()) {
+            guessesStr.setLength(guessesStr.length() - 2); // Xóa dấu phẩy cuối
+        }
+        guessesText.setText(guessesStr.toString());
+
+        correctNumberText.setText("Correct number: " + correctNumber);
+
+        yesButton.setOnClickListener(v -> {
+            resetGame();
+            resultBox.setVisibility(View.GONE);
+            confirmButton.setVisibility(View.VISIBLE);
+            guessEditText.setVisibility(View.VISIBLE);
+        });
+
+        noButton.setOnClickListener(v -> finish());
+    }
+    private void resetGame() {
+        remainingAttempts = 10;
+        guesses.clear();
+        correctNumber = generateRandomNumber(digitCount);
+        updateUI();
+        hintText.setText("");
     }
 }
