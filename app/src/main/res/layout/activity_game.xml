@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/green_phone_wallpapapers_1"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".GameActivity">
+
+    <TextView
+        android:id="@+id/gameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Number Guessing Game"
+        android:textColor="#FF0000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lastGuessText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your last guess: "
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/attemptsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remaining attempts: "
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/hintText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/guessEditText"
+        android:layout_width="233dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="16dp"
+        android:hint="Enter your guess"
+        android:inputType="number"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONFIRM"
+        android:backgroundTint="#FF99CC"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
